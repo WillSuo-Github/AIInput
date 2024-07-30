@@ -62,7 +62,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //            mainPanel.show(on: insertPosition)
             let focusedElementBefore = getFocusedUIElementTextBeforeCursor()
             let focusedElementAfter = getFocusedUIElementTextAfterCursor()
-            
+            Task {
+                let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore ?? "", after: focusedElementAfter ?? "")
+                print(result)
+            }
         }
     }
     

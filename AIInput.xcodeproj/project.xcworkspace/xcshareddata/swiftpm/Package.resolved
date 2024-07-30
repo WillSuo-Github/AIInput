@@ -1,5 +1,5 @@
 {
-  "originHash" : "a88d79c69044bff1017de648d44213860dfd6b45285c4f3efde35551d0f370a6",
+  "originHash" : "f3b8b9168b1e41c3b93f31b7c08fd38f6de2047c50e78a9e542282bafd6893ac",
   "pins" : [
     {
       "identity" : "keyboardshortcuts",
@@ -20,6 +20,15 @@
       }
     },
     {
+      "identity" : "openapikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mattpolzin/OpenAPIKit",
+      "state" : {
+        "revision" : "4991b7e39a19cd1d0d11fe24fc64a601b4820144",
+        "version" : "3.2.0"
+      }
+    },
+    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit",
@@ -35,6 +44,15 @@
       "state" : {
         "revision" : "f66bcd04088582c8fbb5cb8554d577e303bae396",
         "version" : "5.3.0"
+      }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams.git",
+      "state" : {
+        "revision" : "3036ba9d69cf1fd04d433527bc339dc0dc75433d",
+        "version" : "5.1.3"
       }
     }
   ],

@@ -18,6 +18,11 @@
 		34C37E432C564B4300B6E38A /* AXUIElement+Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C37E422C564B4300B6E38A /* AXUIElement+Base.swift */; };
 		34F4860D2C5943C200CF3115 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 34F4860C2C5943C200CF3115 /* OpenAI */; };
 		34F486102C5943E600CF3115 /* SwiftyUserDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 34F4860F2C5943E600CF3115 /* SwiftyUserDefaults */; };
+		34F486132C59443A00CF3115 /* Write.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F486122C59443A00CF3115 /* Write.swift */; };
+		34F486152C5944EB00CF3115 /* Chatgpt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F486142C5944EB00CF3115 /* Chatgpt.swift */; };
+		34F486182C59457500CF3115 /* OpenAPIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 34F486172C59457500CF3115 /* OpenAPIKit */; };
+		34F4861A2C59457500CF3115 /* OpenAPIKit30 in Frameworks */ = {isa = PBXBuildFile; productRef = 34F486192C59457500CF3115 /* OpenAPIKit30 */; };
+		34F4861C2C59457500CF3115 /* OpenAPIKitCompat in Frameworks */ = {isa = PBXBuildFile; productRef = 34F4861B2C59457500CF3115 /* OpenAPIKitCompat */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +36,8 @@
 		34BDBBF02C593D4A009DF4C3 /* MainPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPanel.swift; sourceTree = "<group>"; };
 		34BDBBF52C593D97009DF4C3 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		34C37E422C564B4300B6E38A /* AXUIElement+Base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AXUIElement+Base.swift"; sourceTree = "<group>"; };
+		34F486122C59443A00CF3115 /* Write.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Write.swift; sourceTree = "<group>"; };
+		34F486142C5944EB00CF3115 /* Chatgpt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatgpt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,9 +46,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				34A341542C4FF72D001481F4 /* SnapKit in Frameworks */,
+				34F4861A2C59457500CF3115 /* OpenAPIKit30 in Frameworks */,
 				34F4860D2C5943C200CF3115 /* OpenAI in Frameworks */,
 				34BDBBF42C593D7F009DF4C3 /* KeyboardShortcuts in Frameworks */,
 				34F486102C5943E600CF3115 /* SwiftyUserDefaults in Frameworks */,
+				34F486182C59457500CF3115 /* OpenAPIKit in Frameworks */,
+				34F4861C2C59457500CF3115 /* OpenAPIKitCompat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +77,7 @@
 		34A3413F2C4FEFB4001481F4 /* AIInput */ = {
 			isa = PBXGroup;
 			children = (
+				34F486112C59442200CF3115 /* AIWrite */,
 				34A3414D2C4FF15F001481F4 /* Info.plist */,
 				34C37E422C564B4300B6E38A /* AXUIElement+Base.swift */,
 				34A341402C4FEFB4001481F4 /* AppDelegate.swift */,
@@ -78,6 +89,15 @@
 				34A341472C4FEFB5001481F4 /* AIInput.entitlements */,
 			);
 			path = AIInput;
+			sourceTree = "<group>";
+		};
+		34F486112C59442200CF3115 /* AIWrite */ = {
+			isa = PBXGroup;
+			children = (
+				34F486122C59443A00CF3115 /* Write.swift */,
+				34F486142C5944EB00CF3115 /* Chatgpt.swift */,
+			);
+			path = AIWrite;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -101,6 +121,9 @@
 				34BDBBF32C593D7F009DF4C3 /* KeyboardShortcuts */,
 				34F4860C2C5943C200CF3115 /* OpenAI */,
 				34F4860F2C5943E600CF3115 /* SwiftyUserDefaults */,
+				34F486172C59457500CF3115 /* OpenAPIKit */,
+				34F486192C59457500CF3115 /* OpenAPIKit30 */,
+				34F4861B2C59457500CF3115 /* OpenAPIKitCompat */,
 			);
 			productName = AIInput;
 			productReference = 34A3413D2C4FEFB4001481F4 /* AIInput.app */;
@@ -135,6 +158,7 @@
 				34BDBBF22C593D7F009DF4C3 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				34F4860B2C5943C200CF3115 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				34F4860E2C5943E600CF3115 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
+				34F486162C59457500CF3115 /* XCRemoteSwiftPackageReference "OpenAPIKit" */,
 			);
 			productRefGroup = 34A3413E2C4FEFB4001481F4 /* Products */;
 			projectDirPath = "";
@@ -163,6 +187,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				34A3414F2C4FF3BF001481F4 /* PermissionsService.swift in Sources */,
+				34F486152C5944EB00CF3115 /* Chatgpt.swift in Sources */,
+				34F486132C59443A00CF3115 /* Write.swift in Sources */,
 				34A341412C4FEFB4001481F4 /* AppDelegate.swift in Sources */,
 				34BDBBF62C593D97009DF4C3 /* MainViewController.swift in Sources */,
 				34BDBBF12C593D4A009DF4C3 /* MainPanel.swift in Sources */,
@@ -416,6 +442,14 @@
 				minimumVersion = 5.3.0;
 			};
 		};
+		34F486162C59457500CF3115 /* XCRemoteSwiftPackageReference "OpenAPIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattpolzin/OpenAPIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -438,6 +472,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 34F4860E2C5943E600CF3115 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */;
 			productName = SwiftyUserDefaults;
+		};
+		34F486172C59457500CF3115 /* OpenAPIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F486162C59457500CF3115 /* XCRemoteSwiftPackageReference "OpenAPIKit" */;
+			productName = OpenAPIKit;
+		};
+		34F486192C59457500CF3115 /* OpenAPIKit30 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F486162C59457500CF3115 /* XCRemoteSwiftPackageReference "OpenAPIKit" */;
+			productName = OpenAPIKit30;
+		};
+		34F4861B2C59457500CF3115 /* OpenAPIKitCompat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F486162C59457500CF3115 /* XCRemoteSwiftPackageReference "OpenAPIKit" */;
+			productName = OpenAPIKitCompat;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
