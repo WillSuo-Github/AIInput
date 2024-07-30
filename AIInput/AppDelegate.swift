@@ -54,8 +54,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         
-        print("Caret position: \(insertPosition)")
-        mainPanel.show(on: insertPosition)
+        if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
+            mainPanel.closeWindow()
+        } else {
+            mainPanel.show(on: insertPosition)
+        }
     }
     
     @objc func test() {
@@ -136,6 +139,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
                     let screenFrame = NSScreen.screens.first?.frame ?? .zero
                     let caretPosition = CGPoint(x: bounds.origin.x, y: screenFrame.height - bounds.origin.y - bounds.height)
+                    print("Caret position: \(insertPosition)")
                     return caretPosition
                 }
             }

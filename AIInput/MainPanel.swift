@@ -50,11 +50,11 @@ class MainPanel: NSPanel {
     }
     
     override var canBecomeKey: Bool {
-        return true
+        return false
     }
     
     override var canBecomeMain: Bool {
-        return true
+        return false
     }
     
     private func setupContentView() {
