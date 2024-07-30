@@ -17,6 +17,7 @@
 		34BDBBF62C593D97009DF4C3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BDBBF52C593D97009DF4C3 /* MainViewController.swift */; };
 		34C37E432C564B4300B6E38A /* AXUIElement+Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C37E422C564B4300B6E38A /* AXUIElement+Base.swift */; };
 		34F4860D2C5943C200CF3115 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 34F4860C2C5943C200CF3115 /* OpenAI */; };
+		34F486102C5943E600CF3115 /* SwiftyUserDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 34F4860F2C5943E600CF3115 /* SwiftyUserDefaults */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 				34A341542C4FF72D001481F4 /* SnapKit in Frameworks */,
 				34F4860D2C5943C200CF3115 /* OpenAI in Frameworks */,
 				34BDBBF42C593D7F009DF4C3 /* KeyboardShortcuts in Frameworks */,
+				34F486102C5943E600CF3115 /* SwiftyUserDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +100,7 @@
 				34A341532C4FF72D001481F4 /* SnapKit */,
 				34BDBBF32C593D7F009DF4C3 /* KeyboardShortcuts */,
 				34F4860C2C5943C200CF3115 /* OpenAI */,
+				34F4860F2C5943E600CF3115 /* SwiftyUserDefaults */,
 			);
 			productName = AIInput;
 			productReference = 34A3413D2C4FEFB4001481F4 /* AIInput.app */;
@@ -131,6 +134,7 @@
 				34A341522C4FF72D001481F4 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				34BDBBF22C593D7F009DF4C3 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				34F4860B2C5943C200CF3115 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				34F4860E2C5943E600CF3115 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
 			);
 			productRefGroup = 34A3413E2C4FEFB4001481F4 /* Products */;
 			projectDirPath = "";
@@ -404,6 +408,14 @@
 				minimumVersion = 0.3.0;
 			};
 		};
+		34F4860E2C5943E600CF3115 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sunshinejr/SwiftyUserDefaults";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -421,6 +433,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 34F4860B2C5943C200CF3115 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
+		};
+		34F4860F2C5943E600CF3115 /* SwiftyUserDefaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 34F4860E2C5943E600CF3115 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */;
+			productName = SwiftyUserDefaults;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

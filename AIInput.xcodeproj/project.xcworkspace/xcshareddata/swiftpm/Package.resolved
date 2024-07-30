@@ -1,5 +1,5 @@
 {
-  "originHash" : "d1fb2e7982db9a300a0a9f8900f7ca34603bff118952d9a75bf36e6f29321217",
+  "originHash" : "a88d79c69044bff1017de648d44213860dfd6b45285c4f3efde35551d0f370a6",
   "pins" : [
     {
       "identity" : "keyboardshortcuts",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "swiftyuserdefaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sunshinejr/SwiftyUserDefaults",
+      "state" : {
+        "revision" : "f66bcd04088582c8fbb5cb8554d577e303bae396",
+        "version" : "5.3.0"
       }
     }
   ],
