@@ -30,7 +30,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         monitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown, handler: { event in
-            self.handleKeyDownEvent(event)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                self.handleKeyDownEvent(event)
+            })
         })
     }
 
@@ -57,7 +59,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
             mainPanel.closeWindow()
         } else {
-            mainPanel.show(on: insertPosition)
+//            mainPanel.show(on: insertPosition)
+            let focusedElementBefore = getFocusedUIElementTextBeforeCursor()
+            let focusedElementAfter = getFocusedUIElementTextAfterCursor()
+            
         }
     }
     
@@ -74,6 +79,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             var value: AnyObject?
             AXUIElementCopyAttributeValue(element as! AXUIElement, kAXValueAttribute as CFString, &value)
             return value as? String
+        }
+        return nil
+    }
+    
+
+    func getFocusedUIElementTextBeforeCursor() -> String? {
+        let systemWideElement = AXUIElementCreateSystemWide()
+        var focusedElement: AnyObject?
+        AXUIElementCopyAttributeValue(systemWideElement, kAXFocusedUIElementAttribute as CFString, &focusedElement)
+        
+        if let element = focusedElement {
+            var value: AnyObject?
+            var selectedTextRange: AnyObject?
+            
+            // 获取当前文本内容
+            AXUIElementCopyAttributeValue(element as! AXUIElement, kAXValueAttribute as CFString, &value)
+            
+            // 获取光标的位置
+            AXUIElementCopyAttributeValue(element as! AXUIElement, kAXSelectedTextRangeAttribute as CFString, &selectedTextRange)
+            
+            if let text = value as? String, let rangeValue = selectedTextRange {
+                var range = CFRange()
+                AXValueGetValue(rangeValue as! AXValue, .cfRange, &range)
+                
+                // 确保光标位置在文本长度范围内
+                if range.location <= text.count {
+                    let index = text.index(text.startIndex, offsetBy: range.location)
+                    return String(text[..<index])
+                }
+            }
+        }
+        return nil
+    }
+
+    func getFocusedUIElementTextAfterCursor() -> String? {
+        let systemWideElement = AXUIElementCreateSystemWide()
+        var focusedElement: AnyObject?
+        AXUIElementCopyAttributeValue(systemWideElement, kAXFocusedUIElementAttribute as CFString, &focusedElement)
+        
+        if let element = focusedElement {
+            var value: AnyObject?
+            var selectedTextRange: AnyObject?
+            
+            // 获取当前文本内容
+            AXUIElementCopyAttributeValue(element as! AXUIElement, kAXValueAttribute as CFString, &value)
+            
+            // 获取光标的位置
+            AXUIElementCopyAttributeValue(element as! AXUIElement, kAXSelectedTextRangeAttribute as CFString, &selectedTextRange)
+            
+            if let text = value as? String, let rangeValue = selectedTextRange {
+                var range = CFRange()
+                AXValueGetValue(rangeValue as! AXValue, .cfRange, &range)
+                
+                // 确保光标位置在文本长度范围内
+                if range.location <= text.count {
+                    let index = text.index(text.startIndex, offsetBy: range.location)
+                    return String(text[index...])
+                }
+            }
         }
         return nil
     }
@@ -139,7 +203,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
                     let screenFrame = NSScreen.screens.first?.frame ?? .zero
                     let caretPosition = CGPoint(x: bounds.origin.x, y: screenFrame.height - bounds.origin.y - bounds.height)
-                    print("Caret position: \(insertPosition)")
+                    print("Caret position: \(caretPosition)")
                     return caretPosition
                 }
             }
