@@ -69,9 +69,11 @@ extension MainPanel {
         contentViewController = mainViewController
     }
     
-    func show(on point: NSPoint?) {
+    @MainActor
+    func show(on point: NSPoint?, text: String) {
+        mainViewController.updateText(string: text)
         if let point = point {
-            let realPoint = NSPoint(x: point.x, y: point.y - frame.height)
+            let realPoint = NSPoint(x: point.x, y: point.y + 44)
             setFrameOrigin(realPoint)
         } else {
             center()
@@ -95,7 +97,7 @@ extension MainPanel {
 extension MainPanel {
     private func registerHotKey() {
         KeyboardShortcuts.onKeyDown(for: .main) { [weak self] in
-            self?.show(on: nil)
+            self?.show(on: nil, text: "")
         }
     }
 }

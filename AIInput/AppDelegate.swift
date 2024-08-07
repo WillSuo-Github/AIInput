@@ -53,18 +53,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let insertPosition = getCaretPosition2()
         guard let insertPosition = insertPosition, insertPosition != .zero else {
             print("No caret position found.")
+            mainPanel.closeWindow()
             return
         }
         
         if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
             mainPanel.closeWindow()
         } else {
-//            mainPanel.show(on: insertPosition)
             let focusedElementBefore = getFocusedUIElementTextBeforeCursor()
             let focusedElementAfter = getFocusedUIElementTextAfterCursor()
             Task {
                 let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore ?? "", after: focusedElementAfter ?? "")
-                print(result)
+                await MainActor.run {
+                    mainPanel.show(on: insertPosition, text: result)
+                }
             }
         }
     }
