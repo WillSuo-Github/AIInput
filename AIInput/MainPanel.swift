@@ -86,6 +86,38 @@ extension MainPanel {
     }
 }
 
+// MARK: - Action
+extension MainPanel {
+    private func accept() {
+        appendTextAtCursorPosition(text: mainViewController.currentText)
+        closeWindow()
+    }
+    
+    func appendTextAtCursorPosition(text: String) {
+        guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
+            return
+        }
+        
+        let pid = frontmostApp.processIdentifier
+        let axApp = AXUIElementCreateApplication(pid)
+        
+        var focusedElement: CFTypeRef?
+        let result = AXUIElementCopyAttributeValue(axApp, kAXFocusedUIElementAttribute as CFString, &focusedElement)
+        
+        if result == .success, let focusedElement = focusedElement {
+            let axFocusedElement = focusedElement as! AXUIElement
+            
+            var currentValue: CFTypeRef?
+            let copyResult = AXUIElementCopyAttributeValue(axFocusedElement, kAXValueAttribute as CFString, &currentValue)
+            
+            if copyResult == .success, let currentValue = currentValue as? String {
+                let newValue = currentValue + text
+                AXUIElementSetAttributeValue(axFocusedElement, kAXValueAttribute as CFString, newValue as CFTypeRef)
+            }
+        }
+    }
+}
+
 // MARK: - Observer
 extension MainPanel {
     private func setupObserver() {
@@ -98,6 +130,11 @@ extension MainPanel {
     private func registerHotKey() {
         KeyboardShortcuts.onKeyDown(for: .main) { [weak self] in
             self?.show(on: nil, text: "")
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .accept) { [weak self] in
+            guard let self = self else { return }
+            self.accept()
         }
     }
 }
@@ -134,4 +171,7 @@ extension MainPanel: NSWindowDelegate {
 
 extension KeyboardShortcuts.Name {
     static let main = Self("Main", default: .init(.a, modifiers: [.command, .shift]))
+    static let accept = Self("Accept", default: .init(.return, modifiers: [.command, .shift]))
 }
+
+

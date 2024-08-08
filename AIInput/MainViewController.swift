@@ -7,6 +7,7 @@
 
 import Foundation
 import Cocoa
+import KeyboardShortcuts
 
 final class MainViewController: NSViewController {
     
@@ -33,6 +34,10 @@ final class MainViewController: NSViewController {
         scrollView.documentView = textView
         return scrollView
     }()
+    
+    var currentText: String {
+        return textView.string
+    }
     
     override func loadView() {
         view = BaseView()

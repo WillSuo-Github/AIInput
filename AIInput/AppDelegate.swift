@@ -12,10 +12,14 @@ import Carbon
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    private var currentTaskIdentifier: TimeInterval = 0
 
     @IBOutlet var window: NSWindow!
     var monitor: Any?
     private var service = PermissionsService()
+    
+    private var workItem: DispatchWorkItem?
     
     private lazy var mainPanel: MainPanel = {
         let result = MainPanel()
@@ -49,23 +53,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
     func handleKeyDownEvent(_ event: NSEvent) {
+        mainPanel.closeWindow()
+        
         // 处理键盘事件
         let insertPosition = getCaretPosition2()
         guard let insertPosition = insertPosition, insertPosition != .zero else {
             print("No caret position found.")
-            mainPanel.closeWindow()
             return
         }
+        
+        if let workItem = workItem {
+            workItem.cancel()
+        }
+        
+        workItem = DispatchWorkItem {
+            self.requestText(event, insertPosition: insertPosition)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem!)
+    }
+    
+    private func requestText(_ event: NSEvent, insertPosition: CGPoint) {
+        let taskIdentifier = Date().timeIntervalSince1970
+        currentTaskIdentifier = taskIdentifier
         
         if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
             mainPanel.closeWindow()
         } else {
-            let focusedElementBefore = getFocusedUIElementTextBeforeCursor()
-            let focusedElementAfter = getFocusedUIElementTextAfterCursor()
+            let focusedElementBefore = getFocusedUIElementTextBeforeCursor() ?? ""
+            let focusedElementAfter = getFocusedUIElementTextAfterCursor() ?? ""
+            
+            if focusedElementAfter.isEmpty, focusedElementBefore.isEmpty {
+                print("No text found")
+                return
+            }
+            
             Task {
-                let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore ?? "", after: focusedElementAfter ?? "")
+                let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore, after: focusedElementAfter)
                 await MainActor.run {
-                    mainPanel.show(on: insertPosition, text: result)
+                    if self.currentTaskIdentifier == taskIdentifier, !result.isEmpty {
+                        mainPanel.show(on: insertPosition, text: result)
+                    } else {
+                        print("Result discarded. A newer request has been made.")
+                    }
                 }
             }
         }
