@@ -89,30 +89,51 @@ extension MainPanel {
 // MARK: - Action
 extension MainPanel {
     private func accept() {
-        appendTextAtCursorPosition(text: mainViewController.currentText)
+        insertTextAtCursorPosition(text: mainViewController.currentText)
         closeWindow()
     }
     
-    func appendTextAtCursorPosition(text: String) {
+    func insertTextAtCursorPosition(text: String) {
         guard let frontmostApp = NSWorkspace.shared.frontmostApplication else {
             return
         }
-        
+
         let pid = frontmostApp.processIdentifier
         let axApp = AXUIElementCreateApplication(pid)
-        
+
         var focusedElement: CFTypeRef?
         let result = AXUIElementCopyAttributeValue(axApp, kAXFocusedUIElementAttribute as CFString, &focusedElement)
-        
+
         if result == .success, let focusedElement = focusedElement {
             let axFocusedElement = focusedElement as! AXUIElement
-            
+
             var currentValue: CFTypeRef?
             let copyResult = AXUIElementCopyAttributeValue(axFocusedElement, kAXValueAttribute as CFString, &currentValue)
-            
+
             if copyResult == .success, let currentValue = currentValue as? String {
-                let newValue = currentValue + text
-                AXUIElementSetAttributeValue(axFocusedElement, kAXValueAttribute as CFString, newValue as CFTypeRef)
+                // 获取当前光标位置
+                var selectedTextRange: CFTypeRef?
+                let rangeResult = AXUIElementCopyAttributeValue(axFocusedElement, kAXSelectedTextRangeAttribute as CFString, &selectedTextRange)
+
+                if rangeResult == .success, let range = selectedTextRange {
+                    var rangeStruct = CFRange()
+                    AXValueGetValue(range as! AXValue, .cfRange, &rangeStruct)
+
+                    // 构建插入后的文本
+                    let beforeCursor = (currentValue as NSString).substring(to: rangeStruct.location)
+                    let afterCursor = (currentValue as NSString).substring(from: rangeStruct.location)
+//                    let newValue = beforeCursor + text + afterCursor
+                    let newValue = text
+
+                    // 设置新的文本值
+                    AXUIElementSetAttributeValue(axFocusedElement, kAXValueAttribute as CFString, newValue as CFTypeRef)
+
+                    // 移动光标到插入后的新位置
+                    let newCursorPosition = rangeStruct.location + text.count
+                    var newRange = CFRange(location: newCursorPosition, length: 0)
+                    let newAXValue = AXValueCreate(.cfRange, &newRange)
+                    AXUIElementSetAttributeValue(axFocusedElement, kAXSelectedTextRangeAttribute as CFString, newAXValue!)
+                }
             }
         }
     }
