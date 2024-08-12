@@ -9,6 +9,7 @@ import Cocoa
 import SnapKit
 import ApplicationServices
 import Carbon
+import KeyboardShortcuts
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -38,6 +39,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.handleKeyDownEvent(event)
             })
         })
+        
+        KeyboardShortcuts.onKeyDown(for: .refresh) { [weak self] in
+            guard let self = self else { return }
+            startRecognize()
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .close) { [weak self] in
+            guard let self = self else { return }
+            mainPanel.closeWindow()
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -53,8 +64,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
     func handleKeyDownEvent(_ event: NSEvent) {
-        mainPanel.closeWindow()
+//        mainPanel.closeWindow()
+//        
+//        if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
+//            mainPanel.closeWindow()
+//        } else {
+//            startRecognize()
+//        }
         
+        let insertPosition = getCaretPosition2()
+        guard let insertPosition = insertPosition, insertPosition != .zero else {
+            print("No caret position found.")
+            return
+        }
+        
+        mainPanel.updatePosition(point: insertPosition)
+    }
+    
+    private func startRecognize() {
         // 处理键盘事件
         let insertPosition = getCaretPosition2()
         guard let insertPosition = insertPosition, insertPosition != .zero else {
@@ -67,35 +94,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         workItem = DispatchWorkItem {
-            self.requestText(event, insertPosition: insertPosition)
+            self.requestText(insertPosition: insertPosition)
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem!)
     }
     
-    private func requestText(_ event: NSEvent, insertPosition: CGPoint) {
+    private func requestText(insertPosition: CGPoint) {
         let taskIdentifier = Date().timeIntervalSince1970
         currentTaskIdentifier = taskIdentifier
         
-        if event.keyCode == kVK_DownArrow || event.keyCode == kVK_UpArrow || event.keyCode == kVK_LeftArrow || event.keyCode == kVK_RightArrow {
-            mainPanel.closeWindow()
-        } else {
-            let focusedElementBefore = getFocusedUIElementTextBeforeCursor() ?? ""
-            let focusedElementAfter = getFocusedUIElementTextAfterCursor() ?? ""
-            
-            if focusedElementAfter.isEmpty, focusedElementBefore.isEmpty {
-                print("No text found")
-                return
-            }
-            
-            Task {
-                let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore, after: focusedElementAfter)
-                await MainActor.run {
-                    if self.currentTaskIdentifier == taskIdentifier, !result.isEmpty {
-                        mainPanel.show(on: insertPosition, text: result)
-                    } else {
-                        print("Result discarded. A newer request has been made.")
-                    }
+        
+        let focusedElementBefore = getFocusedUIElementTextBeforeCursor() ?? ""
+        let focusedElementAfter = getFocusedUIElementTextAfterCursor() ?? ""
+        
+        if focusedElementAfter.isEmpty, focusedElementBefore.isEmpty {
+            print("No text found")
+            return
+        }
+        
+        Task {
+            let result = await Chatgpt.shared.continueWriting(before: focusedElementBefore, after: focusedElementAfter)
+            await MainActor.run {
+                if self.currentTaskIdentifier == taskIdentifier, !result.isEmpty {
+                    mainPanel.show(on: insertPosition, text: result)
+                } else {
+                    print("Result discarded. A newer request has been made.")
                 }
             }
         }

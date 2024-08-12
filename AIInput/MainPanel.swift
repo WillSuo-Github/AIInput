@@ -81,6 +81,11 @@ extension MainPanel {
         makeKeyAndOrderFront(nil)
     }
     
+    func updatePosition(point: NSPoint) {
+        let realPoint = NSPoint(x: point.x, y: point.y + 44)
+        setFrameOrigin(realPoint)
+    }
+    
     func closeWindow() {
         close()
     }
@@ -193,6 +198,8 @@ extension MainPanel: NSWindowDelegate {
 extension KeyboardShortcuts.Name {
     static let main = Self("Main", default: .init(.a, modifiers: [.command, .shift]))
     static let accept = Self("Accept", default: .init(.return, modifiers: [.command, .shift]))
+    static let refresh = Self("Refresh", default: .init(.rightBracket, modifiers: [.control]))
+    static let close = Self("Close", default: .init(.leftBracket, modifiers: [.control]))
 }
 
 
