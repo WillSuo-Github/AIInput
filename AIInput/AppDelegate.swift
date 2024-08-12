@@ -83,7 +83,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let focusedElementBefore = getFocusedUIElementTextBeforeCursor() ?? ""
             let focusedElementAfter = getFocusedUIElementTextAfterCursor() ?? ""
             
-            if focusedElementAfter.isEmpty, focusedElementBefore.isEmpty {
+            if !focusedElementAfter.isEmpty, !focusedElementBefore.isEmpty {
                 print("No text found")
                 return
             }
